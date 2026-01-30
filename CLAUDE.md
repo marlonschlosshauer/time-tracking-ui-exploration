@@ -16,6 +16,9 @@ This application allows users to book time against projects and phases. It featu
 ## Key Files
 
 - `app/page.tsx` - Main application component with all UI logic
+  - `SearchSelect` - Fuzzy-search dropdown component
+  - `BookingRow` - Editable row component (used for both existing and new bookings)
+  - `Home` - Main page component with state management and keyboard shortcuts
 - `app/types.ts` - TypeScript interfaces for Booking, Project, Phase
 - `app/data/mock.ts` - Mock data for projects and phases
 
@@ -78,6 +81,33 @@ Bookings are displayed in a table format with an always-visible "add row" at the
 - Stable UI when switching between days
 - No modal/popup interruption
 - Spreadsheet-like familiarity
+
+All booking rows are fully editable inline:
+- Click any field to edit (project, phase, description, time)
+- Changes auto-save on blur
+- Changing project resets the phase selection
+- Delete bookings with the X button
+
+### BookingRow Component
+A unified component (`BookingRow`) handles both existing bookings and the "add new" row. It manages its own local state and emits `onSave`/`onDelete` events to the parent.
+
+### Keyboard Navigation
+Global shortcuts (work when not in an input, or when in an empty input):
+- `+` → Focus the "add new" row
+- `ArrowDown` → Focus first row's project field
+- `ArrowUp` → Focus last row (add new)
+- `ArrowLeft` → Previous day (skips weekends)
+- `ArrowRight` → Next day (skips weekends)
+
+Row-level navigation (when focused on an input):
+- `ArrowUp` → Move to same field in row above (when cursor at start/end or input empty)
+- `ArrowDown` → Move to same field in row below (when cursor at start/end or input empty)
+
+This enables a fully keyboard-driven workflow:
+1. Use Left/Right to navigate to the correct day
+2. Press Down to enter the booking table
+3. Use Up/Down to navigate between rows
+4. Tab between fields within a row
 
 ## Styling Notes
 
